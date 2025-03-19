@@ -80,6 +80,48 @@
                             </button>
                         </div>
 
+                        <!-- Modal upload CSV -->
+                        <div v-if="showCSVModal"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <div class="bg-white p-6 rounded-lg w-1/3">
+                                <h3 class="text-lg font-bold mb-4">Upload CSV File</h3>
+                                <form @submit.prevent="uploadCSV">
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="department_id">
+                                            Department
+                                        </label>
+                                        <select v-model="csvDepartmentId"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            id="department_id" required>
+                                            <option value="">Select a Department</option>
+                                            <option v-for="department in departments" :key="department.id"
+                                                :value="department.id">
+                                                {{ department.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="csv_file">
+                                            CSV File
+                                        </label>
+                                        <input type="file" ref="csvFileInput" accept=".csv"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            required />
+                                    </div>
+                                    <div class="flex justify-end space-x-4">
+                                        <button type="button" @click="closeCSVModal"
+                                            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                            Cancel
+                                        </button>
+                                        <button type="submit"
+                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                            Upload
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
                         <!-- Table of employees -->
                         <table class="min-w-full bg-white">
                             <thead>
@@ -162,6 +204,49 @@ const selectedDepartment = ref('');
 const startDate = ref('');
 const endDate = ref('');
 const currentPage = ref(props.employees.current_page || 1);
+
+const showCSVModal = ref(false);
+const csvDepartmentId = ref('');
+const csvFileInput = ref(null);
+
+const openCSVModal = () => {
+    showCSVModal.value = true;
+};
+
+const closeCSVModal = () => {
+    showCSVModal.value = false;
+    csvDepartmentId.value = '';
+    if (csvFileInput.value) {
+        csvFileInput.value.value = ''; // clear the file input
+    }
+};
+
+const uploadCSV = async () => {
+    const file = csvFileInput.value.files[0];
+    if (!file || !csvDepartmentId.value) {
+        alert('Please select a department and a CSV file.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('csv_file', file);
+    formData.append('department_id', csvDepartmentId.value);
+
+    try {
+        await router.post('/employees/upload-csv', formData, {
+            onSuccess: () => {
+                alert('Employees uploaded successfully!');
+                closeCSVModal();
+                router.reload(); // reload the page to show the new employees
+            },
+            onError: (errors) => {
+                alert('Error uploading CSV: ' + (errors.message || 'Unknown error'));
+            },
+        });
+    } catch (error) {
+        alert('Error uploading CSV: ' + error.message);
+    }
+};
 
 // Filter employees
 const filteredEmployees = computed(() => {
