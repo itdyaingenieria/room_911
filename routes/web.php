@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees/{employee}/edit-axios', [EmployeeController::class, 'editAxios'])->name('employees.editAxios');
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::post('/employees/upload-csv', [EmployeeController::class, 'uploadCSV'])->name('employees.upload-csv');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
