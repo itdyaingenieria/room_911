@@ -7,6 +7,9 @@ use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\EmployeesImport;
 
 class EmployeeController extends Controller
 {
@@ -105,5 +108,25 @@ class EmployeeController extends Controller
     {
         $employee->delete();
         return redirect()->route('employees.index');
+    }
+
+    // Upload CSV file
+    public function uploadCSV(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'csv_file'      => 'required|file|mimes:csv,txt',
+            'department_id' => 'required|exists:departments,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid file or department.'], 422);
+        }
+
+        try {
+            Excel::import(new EmployeesImport($request->department_id), $request->file('csv_file'));
+            return response()->json(['message' => 'Employees uploaded successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error uploading CSV: ' . $e->getMessage()], 500);
+        }
     }
 }
