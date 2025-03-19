@@ -1,0 +1,238 @@
+<template>
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Employees
+            </h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+
+                        <div class="flex flex-wrap items-end gap-4 mb-6">
+                            <!-- search -->
+                            <div class="flex-1">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Search</label>
+                                <input v-model="search" type="text" placeholder="Search by name or ID"
+                                    class="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                            </div>
+
+                            <!-- Filter by department -->
+                            <div class="flex-1">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Department</label>
+                                <select v-model="selectedDepartment"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <option value="">Filter by deparment</option>
+                                    <option v-for="department in departments" :key="department.id"
+                                        :value="department.id">
+                                        {{ department.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Filter date -->
+                            <div class="flex-1">
+                                <div class="flex space-x-2">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2">Initial access
+                                            date</label>
+                                        <input v-model="startDate" type="date"
+                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2">Final access
+                                            date</label>
+                                        <input v-model="endDate" type="date"
+                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Buttons for filter -->
+                            <div class="flex items-end gap-2">
+                                <button @click="applyFilters"
+                                    class="flex items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                    <FunnelIcon class="w-4 h-4" /> Filter
+                                </button>
+                                <button @click="clearFilters"
+                                    class="flex items-center gap-1 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                    <XMarkIcon class="w-5 h-5" /> Clear filter
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Líne -->
+                        <hr class="my-6 border-gray-400" />
+
+                        <!-- Button New Employee -->
+                        <div class="mb-6 flex justify-end">
+                            <button @click="createEmployee"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                New Employee
+                            </button>
+                        </div>
+
+                        <!-- Table of employees -->
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b">Employee ID</th>
+                                    <th class="py-2 px-4 border-b">First Name</th>
+                                    <th class="py-2 px-4 border-b">Last Name</th>
+                                    <th class="py-2 px-4 border-b">Department</th>
+                                    <th class="py-2 px-4 border-b">Has Access</th>
+                                    <th class="py-2 px-4 border-b">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="employee in filteredEmployees" :key="employee.id">
+                                    <td class="py-2 px-4 border-b">{{ employee.identification }}</td>
+                                    <td class="py-2 px-4 border-b">{{ employee.first_name }}</td>
+                                    <td class="py-2 px-4 border-b">{{ employee.last_name }}</td>
+                                    <td class="py-2 px-4 border-b">{{ employee.department.name }}</td>
+                                    <td class="py-2 px-4 border-b">{{ employee.has_access ? 'Yes' : 'No' }}</td>
+                                    <td class="py-2 px-4 border-b">
+                                        <div class="flex space-x-2">
+                                            <button @click="editEmployee(employee.id)"
+                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                <ArrowPathIcon class="w-5 h-5" /> Update
+                                            </button>
+                                            <button @click="editAxiosEmployee(employee.id)"
+                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                <ArrowPathIcon class="w-5 h-5" /> UpdateAxios
+                                            </button>
+
+                                            <button @click="deleteEmployee(employee.id)"
+                                                class="flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                <TrashIcon class="w-5 h-5" /> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination -->
+                        <div class="mt-4 flex justify-between items-center">
+                            <div>
+                                <span class="text-sm text-gray-700">
+                                    Showing {{ employees.from }} to {{ employees.to }} of {{ employees.total }} entries
+                                </span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button v-for="link in employees.links" :key="link.label" @click="goToPage(link.url)"
+                                    :disabled="!link.url" class="px-4 py-2 rounded-md" :class="{
+                                        'bg-blue-500 text-white': link.active,
+                                        'bg-gray-200 text-gray-700': !link.active,
+                                        'opacity-50 cursor-not-allowed': !link.url
+                                    }">
+                                    <span v-html="link.label"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { router } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { ArrowPathIcon, TrashIcon, FunnelIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+
+const props = defineProps({
+    employees: Object,
+    departments: Array,
+});
+
+const search = ref('');
+const selectedDepartment = ref('');
+const startDate = ref('');
+const endDate = ref('');
+const currentPage = ref(props.employees.current_page || 1);
+
+// Filter employees
+const filteredEmployees = computed(() => {
+    return props.employees.data.filter(employee => {
+        const matchesSearch = employee.first_name.toLowerCase().includes(search.value.toLowerCase()) ||
+            employee.last_name.toLowerCase().includes(search.value.toLowerCase()) ||
+            employee.identification.includes(search.value);
+
+        const matchesDepartment = selectedDepartment.value ? employee.department_id === selectedDepartment.value : true;
+
+        const matchesDateRange = (!startDate.value || new Date(employee.access_date) >= new Date(startDate.value)) &&
+            (!endDate.value || new Date(employee.access_date) <= new Date(endDate.value));
+
+        return matchesSearch && matchesDepartment && matchesDateRange;
+    });
+});
+
+const applyFilters = () => {
+    router.get('/employees', {
+        search: search.value,
+        department: selectedDepartment.value,
+        startDate: startDate.value,
+        endDate: endDate.value,
+        page: currentPage.value, // Current page
+    }, {
+        preserveState: true, // Prevents Inertia from reloading the entire page
+        replace: true, // Update URL without adding history
+    });
+};
+
+// Limpiar filtros
+const clearFilters = () => {
+    search.value = '';
+    selectedDepartment.value = '';
+    startDate.value = '';
+    endDate.value = '';
+    applyFilters(); // Apply empty filters to reload the full list
+};
+
+// Navigate to the employee creation page
+const createEmployee = () => {
+    router.visit('/employees/create');
+};
+
+const goToPage = (url) => {
+    if (url) {
+        const params = new URLSearchParams(url.split('?')[1]); // Extracts parameters from the URL
+        currentPage.value = params.get('page') || 1; // Gets the current page
+
+        router.get('/employees', {
+            search: search.value,
+            department: selectedDepartment.value,
+            startDate: startDate.value,
+            endDate: endDate.value,
+            page: currentPage.value, // Maintain pagination with filters
+        }, {
+            preserveState: true,
+            replace: true,
+        });
+    }
+};
+
+
+// Navigate to the employee editing page
+const editEmployee = (id) => {
+    router.visit(`/employees/${id}/edit`);
+};
+
+// Navigate to the employee editing page
+const editAxiosEmployee = (id) => {
+    router.visit(`/employees/${id}/edit-axios`);
+};
+
+// Delete employee
+const deleteEmployee = (id) => {
+    if (confirm('Are you sure you want to delete this employee?')) {
+        router.delete(`/employees/${id}`);
+    }
+};
+</script>
