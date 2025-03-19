@@ -51,7 +51,7 @@
                             </div>
 
                             <!-- Buttons for filter -->
-                            <div class="flex items-end gap-2">
+                            <div class="flex items-end gap-2 ">
                                 <button @click="applyFilters"
                                     class="flex items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
                                     <FunnelIcon class="w-4 h-4" /> Filter
@@ -67,10 +67,16 @@
                         <hr class="my-6 border-gray-400" />
 
                         <!-- Button New Employee -->
-                        <div class="mb-6 flex justify-end">
+                        <div class="mb-6 flex justify-end  space-x-2">
                             <button @click="createEmployee"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                                title="Create a new employee">
                                 New Employee
+                            </button>
+                            <button @click="openCSVModal"
+                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                                title="Upload a CSV file">
+                                Upload CSV
                             </button>
                         </div>
 
