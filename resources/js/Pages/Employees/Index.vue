@@ -74,9 +74,9 @@
                                 New Employee
                             </button>
                             <button @click="openCSVModal"
-                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                                class="flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
                                 title="Upload a CSV file">
-                                Upload CSV
+                                <ArrowUpTrayIcon class="w-5 h-5" /> Upload CSV
                             </button>
                         </div>
 
@@ -192,7 +192,7 @@
 import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ArrowPathIcon, TrashIcon, FunnelIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+import { ArrowPathIcon, TrashIcon, FunnelIcon, XMarkIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps({
     employees: Object,
