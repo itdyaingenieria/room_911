@@ -21,7 +21,7 @@ import { Head } from '@inertiajs/vue3';
                         <!-- System Presentation -->
                         <div class="text-center">
                             <h1 class="text-3xl font-bold text-blue-600">
-                                Welcome to the ROOM_911 System
+                                💊 Welcome to the ROOM_911 System
                             </h1>
                             <p class="mt-4 text-lg text-gray-700">
                                 Access control for personnel in the high-cost drug production area.
@@ -77,15 +77,15 @@ import { Head } from '@inertiajs/vue3';
                             </h2>
                             <div class="mt-4 flex justify-center space-x-4">
                                 <a :href="route('employees.index')"
-                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                                    class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
                                     🙋 Manage Employees
                                 </a>
                                 <a :href="route('departments.index')"
-                                    class="rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+                                    class="rounded-xl bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
                                     🏢 Manage Departments
                                 </a>
                                 <a :href="route('access-logs.index')"
-                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                                    class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
                                     🔑 View Access Logs
                                 </a>
                             </div>
