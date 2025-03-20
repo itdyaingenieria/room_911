@@ -27,7 +27,7 @@
                                     <option value="">Filter by deparment</option>
                                     <option v-for="department in departments" :key="department.id"
                                         :value="department.id">
-                                        {{ department.name }}
+                                        🏢{{ department.name }}
                                     </option>
                                 </select>
                             </div>
@@ -96,7 +96,7 @@
                                             <option value="">🏚️Select a Department</option>
                                             <option v-for="department in departments" :key="department.id"
                                                 :value="department.id">
-                                                {{ department.name }}
+                                                🏢{{ department.name }}
                                             </option>
                                         </select>
                                     </div>
