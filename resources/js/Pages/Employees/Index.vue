@@ -150,6 +150,7 @@
                                     <th class="py-2 px-4 border-b">Last Name</th>
                                     <th class="py-2 px-4 border-b">Department</th>
                                     <th class="py-2 px-4 border-b">Has Access</th>
+                                    <th class="py-2 px-4 border-b">Total Access</th>
                                     <th class="py-2 px-4 border-b">Actions</th>
                                 </tr>
                             </thead>
@@ -160,6 +161,7 @@
                                     <td class="py-2 px-4 border-b">{{ employee.last_name }}</td>
                                     <td class="py-2 px-4 border-b">{{ employee.department.name }}</td>
                                     <td class="py-2 px-4 border-b">{{ employee.has_access ? 'Yes' : 'No' }}</td>
+                                    <td class="py-2 px-4 border-b">{{ employee.access_logs_count }}</td>
                                     <td class="py-2 px-4 border-b">
                                         <div class="flex space-x-2">
                                             <button @click="editEmployee(employee.id)"
@@ -302,7 +304,7 @@ const applyFilters = () => {
     });
 };
 
-// Limpiar filtros
+// Clear filters
 const clearFilters = () => {
     search.value = '';
     selectedDepartment.value = '';

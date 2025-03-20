@@ -15,7 +15,12 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Employee::with('department');
+        $query = Employee::with('department')
+            ->withCount('accessLogs');
+        // SELECT employees.*, 
+        //  (SELECT COUNT(*) FROM access_logs 
+        //  WHERE access_logs.employee_id = employees.id) AS access_logs_count
+        // FROM employees;
 
         if ($request->search) {
             $query->where('first_name', 'like', "%{$request->search}%")
@@ -36,10 +41,11 @@ class EmployeeController extends Controller
         $departments = Department::all();
 
         return Inertia::render('Employees/Index', [
-            'employees' => $employees,
+            'employees'   => $employees,
             'departments' => $departments,
         ]);
     }
+
     public function create()
     {
         $departments = Department::all(); // Get all departments for the select input
