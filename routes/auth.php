@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-// Solo los superusuarios pueden registrar nuevos usuarios
+// Only superuser can register new users
 Route::middleware(['auth', 'superuser'])->group(function () {
     Route::get('/admin/register', [RegisteredUserController::class, 'create'])->name('admin.register');
     Route::post('/admin/register', [RegisteredUserController::class, 'store']);

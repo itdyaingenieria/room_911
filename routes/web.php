@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AccessLogController;
-use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AccessController;
 
