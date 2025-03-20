@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'access.valid' => \App\Http\Middleware\EnsureAccessIsValid::class,
+            'superuser'    => \App\Http\Middleware\EnsureUserIsSuperuser::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -14,7 +14,7 @@
 import { router } from '@inertiajs/vue3';
 
 const logout = () => {
-    router.post('/access-simulator/logout', {}, {
+    router.post('/access-simulator/logout-access-simulator', {}, {
         onSuccess: () => {
             localStorage.clear();
             sessionStorage.clear();

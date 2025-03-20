@@ -19,10 +19,9 @@
                 </button>
 
                 <!-- Go Home Button -->
-                <button @click="goHome"
-                    class="flex items-center gap-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
-                    🏠 Go Home
-                </button>
+                <GoHomeDfya @click="goHome">
+                </GoHomeDfya>
+
             </div>
 
             <!-- Show error or success message-->
@@ -36,6 +35,7 @@ import { ref } from 'vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/solid';
+import GoHomeDfya from '@/Components/GoHomeDfya.vue';
 import axios from 'axios';
 
 const employeeId = ref('');
