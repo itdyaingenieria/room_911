@@ -31,7 +31,7 @@ class EmployeeController extends Controller
             $query->whereBetween('access_date', [$request->startDate, $request->endDate]);
         }
 
-        $employees = $query->paginate(5);
+        $employees = $query->paginate(7);
 
         $departments = Department::all();
 
