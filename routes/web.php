@@ -55,6 +55,8 @@ Route::middleware('auth')->group(function () {
 // routes access logs - history
 Route::middleware('auth')->group(function () {
     Route::get('/access-logs', [AccessLogController::class, 'index'])->name('access-logs.index');
+    Route::get('/access-logs/generate-pdf', [AccessLogController::class, 'generatePDF'])
+        ->name('access-logs.generate-pdf');
 });
 
 
