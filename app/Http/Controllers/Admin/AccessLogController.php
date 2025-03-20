@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AccessLogController extends Controller
 {
@@ -38,6 +39,33 @@ class AccessLogController extends Controller
             'accessLogs' => $accessLogs,
             'employees' => $employees
         ]);
+    }
+
+    public function generatePDF(Request $request)
+    {
+        // Get filters from the request
+        $employeeId = $request->input('employee_id');
+        $startDate  = $request->input('startDate');
+        $endDate    = $request->input('endDate');
+
+        // Query the access logs based on filters
+        $query = AccessLog::with('employee');
+
+        if ($employeeId) {
+            $query->where('employee_id', $employeeId);
+        }
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('access_time', [$startDate, $endDate]);
+        }
+
+        $accessLogs = $query->get();
+
+        // Generate the PDF
+        $pdf = Pdf::loadView('pdf.access-logs', compact('accessLogs'));
+
+        // Download the PDF
+        return $pdf->download('access-logs-report.pdf');
     }
 
     /**
