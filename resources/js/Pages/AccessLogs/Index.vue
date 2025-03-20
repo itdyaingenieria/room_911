@@ -20,7 +20,7 @@
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Employee</label>
                                 <select v-model="filters.employee_id"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="">All Employees</option>
+                                    <option value="">👤All Employees</option>
                                     <option v-for="employee in employees" :key="employee.id" :value="employee.id">
                                         👤{{ employee.first_name }} {{ employee.last_name }} ({{ employee.identification
                                         }})
