@@ -51,7 +51,7 @@
                             </div>
 
                             <!-- Buttons for filter -->
-                            <div class="flex items-end gap-2">
+                            <div class="flex items-end gap-2 ">
                                 <button @click="applyFilters"
                                     class="flex items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
                                     <FunnelIcon class="w-4 h-4" /> Filter
@@ -67,11 +67,78 @@
                         <hr class="my-6 border-gray-400" />
 
                         <!-- Button New Employee -->
-                        <div class="mb-6 flex justify-end">
+                        <div class="mb-6 flex justify-end  space-x-2">
                             <button @click="createEmployee"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                                title="Create a new employee">
                                 New Employee
                             </button>
+                            <button @click="openCSVModal"
+                                class="flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                                title="Upload a CSV file">
+                                <ArrowUpTrayIcon class="w-5 h-5" /> Upload CSV
+                            </button>
+                        </div>
+
+                        <!-- Modal upload CSV -->
+                        <div v-if="showCSVModal"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <div class="bg-white p-6 rounded-lg w-1/3">
+                                <h3 class="text-lg font-bold mb-4">Upload CSV File</h3>
+                                <form @submit.prevent="uploadCSV">
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="department_id">
+                                            Department
+                                        </label>
+                                        <select v-model="csvDepartmentId"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            id="department_id" required>
+                                            <option value="">Select a Department</option>
+                                            <option v-for="department in departments" :key="department.id"
+                                                :value="department.id">
+                                                {{ department.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="csv_file">
+                                            CSV File
+                                        </label>
+                                        <input type="file" ref="csvFileInput" accept=".csv"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            required />
+                                    </div>
+
+                                    <div class="flex justify-end space-x-4">
+                                        <button type="button" @click="closeCSVModal"
+                                            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                            Cancel
+                                        </button>
+                                        <button type="submit"
+                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                            Upload
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Global load indicator-->
+                        <div v-if="isLoading"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <div class="bg-white p-6 rounded-lg">
+                                <p class="text-lg font-bold">Uploading CSV...</p>
+                                <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto mt-4"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4">
+                                    </circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </div>
                         </div>
 
                         <!-- Table of employees -->
@@ -144,7 +211,7 @@
 import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ArrowPathIcon, TrashIcon, FunnelIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+import { ArrowPathIcon, TrashIcon, FunnelIcon, XMarkIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps({
     employees: Object,
@@ -156,6 +223,55 @@ const selectedDepartment = ref('');
 const startDate = ref('');
 const endDate = ref('');
 const currentPage = ref(props.employees.current_page || 1);
+
+const showCSVModal = ref(false);
+const csvDepartmentId = ref('');
+const csvFileInput = ref(null);
+const isLoading = ref(false); // Loading indicator
+
+const openCSVModal = () => {
+    showCSVModal.value = true;
+};
+
+const closeCSVModal = () => {
+    showCSVModal.value = false;
+    csvDepartmentId.value = '';
+    if (csvFileInput.value) {
+        csvFileInput.value.value = ''; // clear the file input
+    }
+};
+
+const uploadCSV = async () => {
+    const file = csvFileInput.value.files[0];
+    if (!file || !csvDepartmentId.value) {
+        alert('Please select a department and a CSV file.');
+        return;
+    }
+
+    isLoading.value = true; // Show loading indicator
+
+    const formData = new FormData();
+    formData.append('csv_file', file);
+    formData.append('department_id', csvDepartmentId.value);
+
+    try {
+        router.post('/employees/upload-csv', formData, {
+            onSuccess: () => {
+                alert('Employees uploaded successfully!');
+                closeCSVModal();
+                router.reload(); // reload the page to show the new employees
+            },
+            onError: (errors) => {
+                alert('Error uploading CSV: ' + (errors.message || 'Unknown error'));
+            },
+            onFinish: () => {
+                isLoading.value = false; // Hide loading indicator
+            },
+        });
+    } catch (error) {
+        alert('Error uploading CSV: ' + error.message);
+    }
+};
 
 // Filter employees
 const filteredEmployees = computed(() => {
