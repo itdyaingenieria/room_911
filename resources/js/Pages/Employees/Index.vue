@@ -15,7 +15,7 @@
                             <!-- search -->
                             <div class="flex-1">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Search</label>
-                                <input v-model="search" type="text" placeholder="Search by name or ID"
+                                <input v-model="search" type="text" placeholder="🔍Search by name or ID"
                                     class="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                             </div>
 
