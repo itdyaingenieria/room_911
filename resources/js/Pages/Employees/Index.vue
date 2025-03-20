@@ -108,6 +108,7 @@
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             required />
                                     </div>
+
                                     <div class="flex justify-end space-x-4">
                                         <button type="button" @click="closeCSVModal"
                                             class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
@@ -118,6 +119,7 @@
                                             Upload
                                         </button>
                                     </div>
+
                                 </form>
                             </div>
                         </div>
@@ -233,7 +235,7 @@ const uploadCSV = async () => {
     formData.append('department_id', csvDepartmentId.value);
 
     try {
-        await router.post('/employees/upload-csv', formData, {
+        router.post('/employees/upload-csv', formData, {
             onSuccess: () => {
                 alert('Employees uploaded successfully!');
                 closeCSVModal();

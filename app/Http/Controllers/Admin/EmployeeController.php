@@ -124,7 +124,7 @@ class EmployeeController extends Controller
 
         try {
             Excel::import(new EmployeesImport($request->department_id), $request->file('csv_file'));
-            return response()->json(['message' => 'Employees uploaded successfully.']);
+            return redirect()->route('employees.index');
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error uploading CSV: ' . $e->getMessage()], 500);
         }
