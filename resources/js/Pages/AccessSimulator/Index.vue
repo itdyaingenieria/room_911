@@ -11,10 +11,17 @@
             </div>
 
             <div class="flex justify-center space-x-4">
+                <!-- Access Button -->
                 <button @click="validateAccess"
                     class="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
                     <ArrowRightStartOnRectangleIcon class="w-5 h-5" />
                     Access
+                </button>
+
+                <!-- Go Home Button -->
+                <button @click="goHome"
+                    class="flex items-center gap-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                    🏠 Go Home
                 </button>
             </div>
 
@@ -62,5 +69,10 @@ const validateAccess = async () => {
     } catch (error) {
         message.value = 'An unexpected error occurred';
     }
+};
+
+// Go Home Function
+const goHome = () => {
+    router.visit('/');
 };
 </script>
