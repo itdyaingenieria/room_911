@@ -163,16 +163,16 @@
                                     <td class="py-2 px-4 border-b">
                                         <div class="flex space-x-2">
                                             <button @click="editEmployee(employee.id)"
-                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white  py-1 px-3 rounded-xl">
                                                 <ArrowPathIcon class="w-5 h-5" /> Update
                                             </button>
                                             <button @click="editAxiosEmployee(employee.id)"
-                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white  py-1 px-3 rounded-xl">
                                                 <ArrowPathIcon class="w-5 h-5" /> UpdateAxios
                                             </button>
 
                                             <button @click="deleteEmployee(employee.id)"
-                                                class="flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                class="flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded-xl">
                                                 <TrashIcon class="w-5 h-5" /> Delete
                                             </button>
                                         </div>
