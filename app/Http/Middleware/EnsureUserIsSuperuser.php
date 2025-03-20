@@ -18,14 +18,14 @@ class EnsureUserIsSuperuser
      */
     public function handle(Request $request, Closure $next)
     {
-        // Verificar si el usuario está autenticado y es un superusuario
+        // validate if the user is a superuser and is authenticated
         if ($request->user() && $request->user()->is_superuser) {
             return $next($request);
         }
 
         Log::info('Middleware EnsureUserIsSuperuser execute for: ' . $request->url());
 
-        // Redirigir a la página de inicio o mostrar un error
-        return redirect('/')->with('error', 'You do not have permission to access this page.');
+        // Redirect to the home page dashboard with an error message
+        return redirect('/dashboard')->with('error', 'You do not have permission to access this page.');
     }
 }
