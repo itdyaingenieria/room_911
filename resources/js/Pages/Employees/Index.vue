@@ -34,24 +34,6 @@
                                 </select>
                             </div>
 
-                            <!-- Filter date -->
-                            <div class="flex-1">
-                                <div class="flex space-x-2">
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Initial access
-                                            date</label>
-                                        <input v-model="startDate" type="date"
-                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Final access
-                                            date</label>
-                                        <input v-model="endDate" type="date"
-                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Buttons for filter -->
                             <div class="flex items-end gap-2 ">
                                 <button @click="applyFilters"
@@ -224,8 +206,6 @@ const props = defineProps({
 
 const search = ref('');
 const selectedDepartment = ref('');
-const startDate = ref('');
-const endDate = ref('');
 const currentPage = ref(props.employees.current_page || 1);
 
 const showCSVModal = ref(false);
@@ -286,10 +266,8 @@ const filteredEmployees = computed(() => {
 
         const matchesDepartment = selectedDepartment.value ? employee.department_id === selectedDepartment.value : true;
 
-        const matchesDateRange = (!startDate.value || new Date(employee.access_date) >= new Date(startDate.value)) &&
-            (!endDate.value || new Date(employee.access_date) <= new Date(endDate.value));
 
-        return matchesSearch && matchesDepartment && matchesDateRange;
+        return matchesSearch && matchesDepartment;
     });
 });
 
@@ -328,8 +306,6 @@ const goToPage = (url) => {
         router.get('/employees', {
             search: search.value,
             department: selectedDepartment.value,
-            startDate: startDate.value,
-            endDate: endDate.value,
             page: currentPage.value, // Maintain pagination with filters
         }, {
             preserveState: true,

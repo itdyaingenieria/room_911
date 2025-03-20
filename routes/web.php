@@ -52,8 +52,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/employees/upload-csv', [EmployeeController::class, 'uploadCSV'])->name('employees.upload-csv');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('access-logs', AccessLogController::class);
+// routes access logs - history
+Route::middleware('auth')->group(function () {
+    Route::get('/access-logs', [AccessLogController::class, 'index'])->name('access-logs.index');
 });
 
 
@@ -65,5 +66,8 @@ Route::middleware(['access.valid'])->group(function () {
         ->name('access-simulator.dashboard');
     Route::post('/access-simulator/logout-access-simulator', [AccessController::class, 'logout'])->name('logout-access-simulator');
 });
+
+
+
 
 require __DIR__ . '/auth.php';

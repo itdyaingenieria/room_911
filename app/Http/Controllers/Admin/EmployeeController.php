@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\EmployeesImport;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
@@ -17,26 +19,22 @@ class EmployeeController extends Controller
     {
         $query = Employee::with('department')
             ->withCount('accessLogs');
-        // SELECT employees.*, 
-        //  (SELECT COUNT(*) FROM access_logs 
-        //  WHERE access_logs.employee_id = employees.id) AS access_logs_count
-        // FROM employees;
 
         if ($request->search) {
-            $query->where('first_name', 'like', "%{$request->search}%")
-                ->orWhere('last_name', 'like', "%{$request->search}%")
-                ->orWhere('identification', 'like', "%{$request->search}%");
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'like', "%{$request->search}%")
+                    ->orWhere('last_name', 'like', "%{$request->search}%")
+                    ->orWhere('identification', 'like', "%{$request->search}%");
+            });
         }
 
         if ($request->department) {
             $query->where('department_id', $request->department);
         }
 
-        if ($request->startDate && $request->endDate) {
-            $query->whereBetween('access_date', [$request->startDate, $request->endDate]);
-        }
+        $employees = $query->paginate(8);
 
-        $employees = $query->paginate(7);
+        Log::info('Filtered Employees: ' . json_encode($employees->items()));
 
         $departments = Department::all();
 
