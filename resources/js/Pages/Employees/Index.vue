@@ -348,7 +348,7 @@ const editAxiosEmployee = (id) => {
 // Delete employee
 const deleteEmployee = (id) => {
     if (confirm('Are you sure you want to delete this employee?')) {
-        router.delete(`/employees/${id}`);
+        router.delete(`/employees/${id}`); // call url of the route
     }
 };
 </script>
