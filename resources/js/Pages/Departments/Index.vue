@@ -12,11 +12,14 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                     <div class=" p-6 bg-white border-b border-gray-200 ">
-                        <Link :href="route('departments.create')"
-                            class=" gap-4 bg-blue-500 text-white px-4 py-2 rounded-md mb-4 inline-block items-center "
-                            title="Add Department in the system">
-                        Add Department
-                        </Link>
+
+                        <div class="flex flex-wrap justify-end gap-4 mb-6">
+                            <Link :href="route('departments.create')"
+                                class=" gap-4 bg-blue-500 text-white px-4 py-2 rounded-md mb-4 inline-block items-center "
+                                title="Add Department in the system">
+                            Add Department
+                            </Link>
+                        </div>
 
                         <table class="min-w-full">
                             <thead>
