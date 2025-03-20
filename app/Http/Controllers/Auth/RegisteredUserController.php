@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'name'         => $request->name,
             'email'        => $request->email,
             'password'     => Hash::make($request->password),
-            'is_superuser' => false,
+            'is_superuser' =>  $request->is_superuser ?? false,
         ]);
 
         event(new Registered($user));
@@ -49,6 +49,7 @@ class RegisteredUserController extends Controller
 
         // return redirect(route('dashboard', absolute: false));
         // Redirigir al usuario
-        return redirect('/dashboard')->with('success', 'User registered successfully.');
+        //return redirect('/dashboard')->with('success', 'User registered successfully.');
+        return redirect()->route('dashboard')->with('success', 'User registered successfully.');
     }
 }
