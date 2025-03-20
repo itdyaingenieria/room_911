@@ -124,6 +124,23 @@
                             </div>
                         </div>
 
+                        <!-- Global load indicator-->
+                        <div v-if="isLoading"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <div class="bg-white p-6 rounded-lg">
+                                <p class="text-lg font-bold">Uploading CSV...</p>
+                                <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto mt-4"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4">
+                                    </circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+
                         <!-- Table of employees -->
                         <table class="min-w-full bg-white">
                             <thead>
@@ -210,6 +227,7 @@ const currentPage = ref(props.employees.current_page || 1);
 const showCSVModal = ref(false);
 const csvDepartmentId = ref('');
 const csvFileInput = ref(null);
+const isLoading = ref(false); // Loading indicator
 
 const openCSVModal = () => {
     showCSVModal.value = true;
@@ -230,6 +248,8 @@ const uploadCSV = async () => {
         return;
     }
 
+    isLoading.value = true; // Show loading indicator
+
     const formData = new FormData();
     formData.append('csv_file', file);
     formData.append('department_id', csvDepartmentId.value);
@@ -243,6 +263,9 @@ const uploadCSV = async () => {
             },
             onError: (errors) => {
                 alert('Error uploading CSV: ' + (errors.message || 'Unknown error'));
+            },
+            onFinish: () => {
+                isLoading.value = false; // Hide loading indicator
             },
         });
     } catch (error) {
