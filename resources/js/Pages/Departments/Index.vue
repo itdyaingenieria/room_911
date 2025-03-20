@@ -17,7 +17,7 @@
                             <Link :href="route('departments.create')"
                                 class=" gap-4 bg-blue-500 text-white px-4 py-2 rounded-md mb-4 inline-block items-center "
                                 title="Add Department in the system">
-                            Add Department
+                            ➕ Add Department
                             </Link>
                         </div>
 
