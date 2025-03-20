@@ -144,8 +144,15 @@
                                     <td class="py-2 px-4 border-b">{{ employee.first_name }}</td>
                                     <td class="py-2 px-4 border-b">{{ employee.last_name }}</td>
                                     <td class="py-2 px-4 border-b">{{ employee.department.name }}</td>
-                                    <td class="py-2 px-4 border-b">{{ employee.has_access ? 'Yes' : 'No' }}</td>
-                                    <td class="py-2 px-4 border-b">{{ employee.access_logs_count }}</td>
+                                    <td class="py-2 px-4 border-b">
+                                        <span :class="{
+                                            'bg-green-100 text-green-800': employee.has_access,
+                                            'bg-red-100 text-red-800': !employee.has_access
+                                        }" class="px-3 py-1 rounded-full text-sm font-medium">
+                                            {{ employee.has_access ? "✅ Yes" : "❌ No" }}
+                                        </span>
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center">{{ employee.access_logs_count }}</td>
                                     <td class="py-2 px-4 border-b">
                                         <div class="flex space-x-2">
                                             <button @click="editEmployee(employee.id)"
