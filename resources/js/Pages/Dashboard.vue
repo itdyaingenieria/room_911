@@ -78,15 +78,15 @@ import { Head } from '@inertiajs/vue3';
                             <div class="mt-4 flex justify-center space-x-4">
                                 <a :href="route('employees.index')"
                                     class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                                    Manage Employees
+                                    🙋 Manage Employees
                                 </a>
                                 <a :href="route('departments.index')"
                                     class="rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
-                                    Manage Departments
+                                    🏢 Manage Departments
                                 </a>
                                 <a :href="route('access-logs.index')"
                                     class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                                    View Access Logs
+                                    🔑 View Access Logs
                                 </a>
                             </div>
                         </div>
