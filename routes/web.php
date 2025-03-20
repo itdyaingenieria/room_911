@@ -14,7 +14,7 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin'          => Route::has('login'),
-        'canRegister'       => Route::has('register'),
+        //'canRegister'       => Route::has('register'),
         'canValidateAccess' => Route::has('validate-access'),
         'laravelVersion'    => Application::VERSION,
         'phpVersion'        => PHP_VERSION,
@@ -57,8 +57,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('access-logs', AccessLogController::class);
 });
 
-Route::post('/admin/login', [AdminAuthController::class, 'login']);
-Route::post('/admin/register', [AdminAuthController::class, 'register']);
 
 // Routes for the access simulator
 Route::get('/validate-access', [AccessController::class, 'showAccessSimulator'])->name('validate-access');
@@ -66,7 +64,7 @@ Route::post('/validate-access', [AccessController::class, 'validateAccess']);
 Route::middleware(['access.valid'])->group(function () {
     Route::get('/access-simulator/dashboard', [AccessController::class, 'showDashboard'])
         ->name('access-simulator.dashboard');
-    Route::post('/access-simulator/logout', [AccessController::class, 'logout'])->name('logout');
+    Route::post('/access-simulator/logout-access-simulator', [AccessController::class, 'logout'])->name('logout-access-simulator');
 });
 
 require __DIR__ . '/auth.php';
