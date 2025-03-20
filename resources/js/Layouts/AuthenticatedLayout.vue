@@ -41,6 +41,10 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('access-logs.index')">
                                     Logs Access
                                 </NavLink>
+                                <NavLink v-if="$page.props.auth.user && $page.props.auth.user.is_superuser"
+                                    :href="route('admin.register')" :active="route().current('admin.register')">
+                                    Register Admin
+                                </NavLink>
                             </div>
                         </div>
 
@@ -122,6 +126,10 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('access-logs.index')"
                             :active="route().current('access-logs.index')">
                             Logs Access
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="$page.props.auth.user && $page.props.auth.user.is_superuser"
+                            :href="route('admin.register')" :active="route().current('admin.register')">
+                            Register Admin
                         </ResponsiveNavLink>
                     </div>
 
