@@ -54,6 +54,10 @@
                                     class="flex items-center gap-1 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
                                     <XMarkIcon class="w-5 h-5" /> Clear Filter
                                 </button>
+                                <button @click="generatePDFReport"
+                                    class="flex items-center gap-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
+                                    📄 Generate PDF Report
+                                </button>
                             </div>
                         </div>
 
@@ -169,5 +173,17 @@ const goToPage = (url) => {
             replace: true,
         });
     }
+};
+
+const generatePDFReport = () => {
+    // Build the URL with the current filters
+    const url = route("access-logs.generate-pdf", {
+        employee_id: filters.value.employee_id,
+        startDate: filters.value.startDate,
+        endDate: filters.value.endDate,
+    });
+
+    // Open the URL in a new tab to trigger the PDF download
+    window.open(url, "_blank");
 };
 </script>
