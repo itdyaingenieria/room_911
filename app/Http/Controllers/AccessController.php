@@ -19,6 +19,10 @@ class AccessController extends Controller
     {
         $request->validate([
             'employeeId' => 'required|string|exists:employees,identification',
+        ], [
+            'employeeId.required' => 'The Employee ID, is required.',
+            'employeeId.string'   => 'The Employee ID, must be a valid text.',
+            'employeeId.exists'   => 'The Employee ID, does not exist in our records.',
         ]);
 
         $employeeId = $request->input('employeeId');
@@ -64,6 +68,6 @@ class AccessController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('validate-access')->with('success', 'You have been logged out.');
+        return redirect()->route('validate-access')->with('success', 'You have been logged out!!!');
     }
 }
