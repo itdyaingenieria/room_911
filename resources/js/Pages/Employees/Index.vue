@@ -93,7 +93,7 @@
                                         <select v-model="csvDepartmentId"
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             id="department_id" required>
-                                            <option value="">Select a Department</option>
+                                            <option value="">🏚️Select a Department</option>
                                             <option v-for="department in departments" :key="department.id"
                                                 :value="department.id">
                                                 {{ department.name }}
@@ -112,11 +112,11 @@
                                     <div class="flex justify-end space-x-4">
                                         <button type="button" @click="closeCSVModal"
                                             class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
-                                            Cancel
+                                            ❌ Cancel
                                         </button>
                                         <button type="submit"
                                             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
-                                            Upload
+                                            ⬆️Upload
                                         </button>
                                     </div>
 
