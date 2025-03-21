@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\DepartmentController;
-use App\Http\Controllers\Admin\AccessLogController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AccessController;
-
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\AccessController;
+use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\AccessLogController;
+use App\Http\Controllers\Admin\DepartmentController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -20,9 +21,10 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -52,8 +54,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/employees/upload-csv', [EmployeeController::class, 'uploadCSV'])->name('employees.upload-csv');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('access-logs', AccessLogController::class);
+// routes access logs - history
+Route::middleware('auth')->group(function () {
+    Route::get('/access-logs', [AccessLogController::class, 'index'])->name('access-logs.index');
+    Route::get('/access-logs/generate-pdf', [AccessLogController::class, 'generatePDF'])
+        ->name('access-logs.generate-pdf');
 });
 
 
@@ -65,5 +70,8 @@ Route::middleware(['access.valid'])->group(function () {
         ->name('access-simulator.dashboard');
     Route::post('/access-simulator/logout-access-simulator', [AccessController::class, 'logout'])->name('logout-access-simulator');
 });
+
+
+
 
 require __DIR__ . '/auth.php';

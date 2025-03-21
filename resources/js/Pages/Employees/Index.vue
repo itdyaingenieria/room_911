@@ -1,4 +1,6 @@
 <template>
+
+    <Head title="Employees" />
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -15,7 +17,7 @@
                             <!-- search -->
                             <div class="flex-1">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Search</label>
-                                <input v-model="search" type="text" placeholder="Search by name or ID"
+                                <input v-model="search" type="text" placeholder="🔍Search by name or ID"
                                     class="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                             </div>
 
@@ -27,27 +29,9 @@
                                     <option value="">Filter by deparment</option>
                                     <option v-for="department in departments" :key="department.id"
                                         :value="department.id">
-                                        {{ department.name }}
+                                        🏢{{ department.name }}
                                     </option>
                                 </select>
-                            </div>
-
-                            <!-- Filter date -->
-                            <div class="flex-1">
-                                <div class="flex space-x-2">
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Initial access
-                                            date</label>
-                                        <input v-model="startDate" type="date"
-                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Final access
-                                            date</label>
-                                        <input v-model="endDate" type="date"
-                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Buttons for filter -->
@@ -93,10 +77,10 @@
                                         <select v-model="csvDepartmentId"
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             id="department_id" required>
-                                            <option value="">Select a Department</option>
+                                            <option value="">🏚️Select a Department</option>
                                             <option v-for="department in departments" :key="department.id"
                                                 :value="department.id">
-                                                {{ department.name }}
+                                                🏢{{ department.name }}
                                             </option>
                                         </select>
                                     </div>
@@ -112,11 +96,11 @@
                                     <div class="flex justify-end space-x-4">
                                         <button type="button" @click="closeCSVModal"
                                             class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
-                                            Cancel
+                                            ❌ Cancel
                                         </button>
                                         <button type="submit"
                                             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline">
-                                            Upload
+                                            ⬆️Upload
                                         </button>
                                     </div>
 
@@ -150,6 +134,7 @@
                                     <th class="py-2 px-4 border-b">Last Name</th>
                                     <th class="py-2 px-4 border-b">Department</th>
                                     <th class="py-2 px-4 border-b">Has Access</th>
+                                    <th class="py-2 px-4 border-b">Total Access</th>
                                     <th class="py-2 px-4 border-b">Actions</th>
                                 </tr>
                             </thead>
@@ -159,20 +144,28 @@
                                     <td class="py-2 px-4 border-b">{{ employee.first_name }}</td>
                                     <td class="py-2 px-4 border-b">{{ employee.last_name }}</td>
                                     <td class="py-2 px-4 border-b">{{ employee.department.name }}</td>
-                                    <td class="py-2 px-4 border-b">{{ employee.has_access ? 'Yes' : 'No' }}</td>
+                                    <td class="py-2 px-4 border-b">
+                                        <span :class="{
+                                            'bg-green-100 text-green-800': employee.has_access,
+                                            'bg-red-100 text-red-800': !employee.has_access
+                                        }" class="px-3 py-1 rounded-full text-sm font-medium">
+                                            {{ employee.has_access ? "✅ Yes" : "❌ No" }}
+                                        </span>
+                                    </td>
+                                    <td class="py-2 px-4 border-b text-center">{{ employee.access_logs_count }}</td>
                                     <td class="py-2 px-4 border-b">
                                         <div class="flex space-x-2">
                                             <button @click="editEmployee(employee.id)"
-                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white  py-1 px-3 rounded-xl">
                                                 <ArrowPathIcon class="w-5 h-5" /> Update
                                             </button>
                                             <button @click="editAxiosEmployee(employee.id)"
-                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                class="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white  py-1 px-3 rounded-xl">
                                                 <ArrowPathIcon class="w-5 h-5" /> UpdateAxios
                                             </button>
 
                                             <button @click="deleteEmployee(employee.id)"
-                                                class="flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-xl">
+                                                class="flex items-center gap-2 bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded-xl">
                                                 <TrashIcon class="w-5 h-5" /> Delete
                                             </button>
                                         </div>
@@ -209,7 +202,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ArrowPathIcon, TrashIcon, FunnelIcon, XMarkIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
 
@@ -220,8 +213,6 @@ const props = defineProps({
 
 const search = ref('');
 const selectedDepartment = ref('');
-const startDate = ref('');
-const endDate = ref('');
 const currentPage = ref(props.employees.current_page || 1);
 
 const showCSVModal = ref(false);
@@ -282,10 +273,8 @@ const filteredEmployees = computed(() => {
 
         const matchesDepartment = selectedDepartment.value ? employee.department_id === selectedDepartment.value : true;
 
-        const matchesDateRange = (!startDate.value || new Date(employee.access_date) >= new Date(startDate.value)) &&
-            (!endDate.value || new Date(employee.access_date) <= new Date(endDate.value));
 
-        return matchesSearch && matchesDepartment && matchesDateRange;
+        return matchesSearch && matchesDepartment;
     });
 });
 
@@ -302,7 +291,7 @@ const applyFilters = () => {
     });
 };
 
-// Limpiar filtros
+// Clear filters
 const clearFilters = () => {
     search.value = '';
     selectedDepartment.value = '';
@@ -324,8 +313,6 @@ const goToPage = (url) => {
         router.get('/employees', {
             search: search.value,
             department: selectedDepartment.value,
-            startDate: startDate.value,
-            endDate: endDate.value,
             page: currentPage.value, // Maintain pagination with filters
         }, {
             preserveState: true,
@@ -348,7 +335,7 @@ const editAxiosEmployee = (id) => {
 // Delete employee
 const deleteEmployee = (id) => {
     if (confirm('Are you sure you want to delete this employee?')) {
-        router.delete(`/employees/${id}`);
+        router.delete(`/employees/${id}`); // call url of the route
     }
 };
 </script>

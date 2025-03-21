@@ -1,8 +1,3 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-</script>
-
 <template>
 
     <Head title="Dashboard" />
@@ -21,7 +16,7 @@ import { Head } from '@inertiajs/vue3';
                         <!-- System Presentation -->
                         <div class="text-center">
                             <h1 class="text-3xl font-bold text-blue-600">
-                                Welcome to the ROOM_911 System
+                                💊 Welcome to the ROOM_911 System
                             </h1>
                             <p class="mt-4 text-lg text-gray-700">
                                 Access control for personnel in the high-cost drug production area.
@@ -36,7 +31,7 @@ import { Head } from '@inertiajs/vue3';
                                     Registered Employees
                                 </h3>
                                 <p class="mt-2 text-2xl font-bold text-blue-600">
-                                    150
+                                    {{ totalEmployees }}
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">
                                     Total employees with access to ROOM_911.
@@ -49,7 +44,7 @@ import { Head } from '@inertiajs/vue3';
                                     Access Attempts Today
                                 </h3>
                                 <p class="mt-2 text-2xl font-bold text-blue-600">
-                                    25
+                                    {{ accessAttemptsToday }}
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">
                                     Access attempts registered today.
@@ -62,7 +57,7 @@ import { Head } from '@inertiajs/vue3';
                                     Departments
                                 </h3>
                                 <p class="mt-2 text-2xl font-bold text-blue-600">
-                                    5
+                                    {{ totalDepartments }}
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">
                                     Active departments in the system.
@@ -77,16 +72,16 @@ import { Head } from '@inertiajs/vue3';
                             </h2>
                             <div class="mt-4 flex justify-center space-x-4">
                                 <a :href="route('employees.index')"
-                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                                    Manage Employees
+                                    class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                                    🙋 Manage Employees
                                 </a>
                                 <a :href="route('departments.index')"
-                                    class="rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
-                                    Manage Departments
+                                    class="rounded-xl bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+                                    🏢 Manage Departments
                                 </a>
                                 <a :href="route('access-logs.index')"
-                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                                    View Access Logs
+                                    class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                                    🔑 View Access Logs
                                 </a>
                             </div>
                         </div>
@@ -96,3 +91,14 @@ import { Head } from '@inertiajs/vue3';
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head } from '@inertiajs/vue3';
+
+const props = defineProps({
+    totalEmployees: Number,
+    accessAttemptsToday: Number,
+    totalDepartments: Number,
+});
+</script>

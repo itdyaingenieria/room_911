@@ -15,6 +15,6 @@ class Employee extends Model
 
     public function accessLogs()
     {
-        return $this->hasMany(AccessLog::class);
+        return $this->hasMany(AccessLog::class, 'employee_id', 'id');
     }
 }

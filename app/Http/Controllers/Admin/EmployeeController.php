@@ -10,36 +10,40 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\EmployeesImport;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Employee::with('department');
+        $query = Employee::with('department')
+            ->withCount('accessLogs');
 
         if ($request->search) {
-            $query->where('first_name', 'like', "%{$request->search}%")
-                ->orWhere('last_name', 'like', "%{$request->search}%")
-                ->orWhere('identification', 'like', "%{$request->search}%");
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'like', "%{$request->search}%")
+                    ->orWhere('last_name', 'like', "%{$request->search}%")
+                    ->orWhere('identification', 'like', "%{$request->search}%");
+            });
         }
 
         if ($request->department) {
             $query->where('department_id', $request->department);
         }
 
-        if ($request->startDate && $request->endDate) {
-            $query->whereBetween('access_date', [$request->startDate, $request->endDate]);
-        }
+        $employees = $query->paginate(8);
 
-        $employees = $query->paginate(7);
+        Log::info('Filtered Employees: ' . json_encode($employees->items()));
 
         $departments = Department::all();
 
         return Inertia::render('Employees/Index', [
-            'employees' => $employees,
+            'employees'   => $employees,
             'departments' => $departments,
         ]);
     }
+
     public function create()
     {
         $departments = Department::all(); // Get all departments for the select input
