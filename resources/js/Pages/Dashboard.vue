@@ -1,8 +1,3 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-</script>
-
 <template>
 
     <Head title="Dashboard" />
@@ -36,7 +31,7 @@ import { Head } from '@inertiajs/vue3';
                                     Registered Employees
                                 </h3>
                                 <p class="mt-2 text-2xl font-bold text-blue-600">
-                                    150
+                                    {{ totalEmployees }}
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">
                                     Total employees with access to ROOM_911.
@@ -49,7 +44,7 @@ import { Head } from '@inertiajs/vue3';
                                     Access Attempts Today
                                 </h3>
                                 <p class="mt-2 text-2xl font-bold text-blue-600">
-                                    25
+                                    {{ accessAttemptsToday }}
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">
                                     Access attempts registered today.
@@ -62,7 +57,7 @@ import { Head } from '@inertiajs/vue3';
                                     Departments
                                 </h3>
                                 <p class="mt-2 text-2xl font-bold text-blue-600">
-                                    5
+                                    {{ totalDepartments }}
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">
                                     Active departments in the system.
@@ -96,3 +91,14 @@ import { Head } from '@inertiajs/vue3';
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head } from '@inertiajs/vue3';
+
+const props = defineProps({
+    totalEmployees: Number,
+    accessAttemptsToday: Number,
+    totalDepartments: Number,
+});
+</script>
