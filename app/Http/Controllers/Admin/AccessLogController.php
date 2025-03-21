@@ -37,34 +37,39 @@ class AccessLogController extends Controller
 
         return Inertia::render('AccessLogs/Index', [
             'accessLogs' => $accessLogs,
-            'employees' => $employees
+            'employees'  => $employees
         ]);
     }
 
     public function generatePDF(Request $request)
     {
         // Get filters from the request
-        $employeeId = $request->input('employee_id');
-        $startDate  = $request->input('startDate');
-        $endDate    = $request->input('endDate');
+        $filters = [
+            'startDate' => $request->input('startDate'),
+            'endDate'   => $request->input('endDate'),
+        ];
 
         // Query the access logs based on filters
         $query = AccessLog::with('employee');
 
-        if ($employeeId) {
-            $query->where('employee_id', $employeeId);
+        if ($request->has('employee_id') && $request->input('employee_id')) {
+            $query->where('employee_id', $request->input('employee_id'));
         }
 
-        if ($startDate && $endDate) {
+        if ($request->startDate && $request->endDate) {
+            $startDate = Carbon::parse($request->startDate)->startOfDay();
+            $endDate   = Carbon::parse($request->endDate)->endOfDay();
             $query->whereBetween('access_time', [$startDate, $endDate]);
         }
 
         $accessLogs = $query->get();
 
         // Generate the PDF
-        $pdf = Pdf::loadView('pdf.access-logs', compact('accessLogs'));
+        $pdf = Pdf::loadView('pdf.access-logs', [
+            'accessLogs' => $accessLogs,
+            'filters'    => $filters, // Pass filters to the view
+        ]);
 
-        // Download the PDF
         return $pdf->download('access-logs-report.pdf');
     }
 
