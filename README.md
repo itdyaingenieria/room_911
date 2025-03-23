@@ -66,7 +66,7 @@ php artisan key:generate
 
 ### 5️⃣ Ejecutar Migraciones y Seeders
 ```sh
-php artisan migrate --seed
+php artisan migrate:refresh
 ```
 
 ### 6️⃣ Iniciar el Servidor de Desarrollo
@@ -90,7 +90,7 @@ php artisan tinker
 ```
 Luego, dentro de Tinker, ingresar:
 ```php
-User::create([ 'name' => 'Admin', 'email' => 'admin@itdyaingenieria.com', 'password' => bcrypt('pass2025') ]);
+User::create([ 'name' => 'Admin', 'email' => 'admin@itdyaingenieria.com', 'password' => bcrypt('pass2025'), 'is_superuser'=> '1' ]);
 ```
 
 ---
