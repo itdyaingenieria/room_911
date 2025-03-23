@@ -90,7 +90,7 @@ php artisan tinker
 ```
 Luego, dentro de Tinker, ingresar:
 ```php
-User::create([ 'name' => 'Admin', 'email' => 'admin@itdyaingenieria.com', 'password' => bcrypt('pass2025'), 'is_superuser'=> '1' ]);
+User::create([ 'name' => 'Admin room911', 'email' => 'admin@itdyaingenieria.com', 'password' => bcrypt('pass2025'), 'is_superuser'=> '1' ]);
 ```
 
 ---
