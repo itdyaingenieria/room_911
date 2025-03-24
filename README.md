@@ -101,7 +101,7 @@ User::create([ 'name' => 'Admin room911', 'email' => 'admin@itdyaingenieria.com'
 ✅ **Protección con Middleware** - Rutas aseguradas con middlewares personalizados en Laravel.
 ✅ **Registros de Acceso en Tiempo Real** - Se almacenan inicios de sesión y actividades en MySQL.
 ✅ **Interfaz Dinámica con Vue.js** - Frontend construido con Vue 3 e Inertia.js.
-✅ **Control de Acceso Basado en Roles (RBAC)** -  Rol de usuario para gestionar permisos - is_superisee.
+✅ **Control de Acceso Basado en Roles (RBAC)** -  Rol de usuario para gestionar permisos - is_superuser
 
 ---
 
