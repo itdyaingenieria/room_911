@@ -282,8 +282,8 @@ const applyFilters = () => {
     router.get('/employees', {
         search: search.value,
         department: selectedDepartment.value,
-        startDate: startDate.value,
-        endDate: endDate.value,
+        //startDate: startDate.value,
+        //endDate: endDate.value,
         page: currentPage.value, // Current page
     }, {
         preserveState: true, // Prevents Inertia from reloading the entire page
@@ -295,8 +295,8 @@ const applyFilters = () => {
 const clearFilters = () => {
     search.value = '';
     selectedDepartment.value = '';
-    startDate.value = '';
-    endDate.value = '';
+    //startDate.value = '';
+    //endDate.value = '';
     applyFilters(); // Apply empty filters to reload the full list
 };
 
