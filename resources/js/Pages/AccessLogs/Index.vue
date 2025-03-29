@@ -85,7 +85,9 @@
                                     <td class="py-2 px-4 border-b">{{ log.employee?.identification }}</td>
                                     <td class="py-2 px-4 border-b">{{ log.access_time }}</td>
                                     <td class="py-2 px-4 border-b">{{ log.access_granted ? "✅ Yes" : "❌ No" }}</td>
-                                    <td class="py-2 px-4 border-b">{{ log.created_at }}</td>
+                                    <td class="py-2 px-4 border-b">{{ new Date(log.created_at).toISOString().slice(0,
+                                        19).replace("T", " ")
+                                        }}</td>
                                 </tr>
                             </tbody>
                         </table>
